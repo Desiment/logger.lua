@@ -7,8 +7,8 @@ local logger = { _version = "0.1.0" }
 logger.modes = {
   { name = "trace",   color = "\27[34m", depth = 4},
   { name = "debug",   color = "\27[36m", depth = 3},
-  { name = "info",    color = "\27[32m", depth = 2},
-  { name = "success", color = "\27[35m", depth = 2},
+  { name = "info",    color = "\27[30m", depth = 2},
+  { name = "success", color = "\27[32m", depth = 2},
   { name = "warning", color = "\27[33m", depth = 2},
   { name = "error",   color = "\27[31m", depth = 1},
   { name = "fatal",   color = "\27[35m", depth = 0},
@@ -19,6 +19,7 @@ logger.output = "console" -- other option is "file"
 logger.file   = "log"     -- in case of writing into a file
 
 -- helping functions ---
+-- ToDo: number printing
 
 local _obj_to_string
 local _tbl_to_string
