@@ -114,7 +114,9 @@ logger.call = {}
 for _, md in ipairs(logger.modes) do
 	logger.call[md.name] = function(func)
 		return (function(...)
-			logger._write(md.name:upper(), logger._msg("Registered function call; args = ", logger._args(...)), logger._info(), md.color)
+			if md.depth <= logger.depth then
+				logger._write(md.name:upper(), logger._msg("Registered function call; args = ", logger._args(...)), logger._info(), md.color)
+			end
 			return func(...)
 		end)
 	end
