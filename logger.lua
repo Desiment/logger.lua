@@ -19,7 +19,7 @@ logger.output = "console" -- other option is "file"
 logger.file   = "log"     -- in case of writing into a file
 
 -- helping functions ---
--- ToDo: number printing
+-- ToDo: number formating
 
 local _obj_to_string
 local _tbl_to_string
@@ -69,7 +69,11 @@ logger._msg  = _msg_to_string
 logger._info = _get_info
 
 
--- logger writers --
+--- logger writers ---
+
+-- generic interface to log something is "logger._write()" function;
+-- based on the value of the "logger.output" it chooses method for writing log;
+-- e.g. if you want output logs to JSON you should create function "logger._write_json()" and then modify "logger._write()" code;
 
 logger._write_console = function(name, message, info, color)
 	print(string.format("%s[%-8s%s]%s %s: %s", color, name, os.date("%H:%M:%S"), "\27[0m", info, message))
@@ -89,6 +93,11 @@ logger._write = function(...)
 	end
 end
 
+--- logger modes ---
+-- "logger.dump()" just dumps a table into string
+-- "logger.mode(...)" (where mode one of the defined modes) concates args and writes them into the log
+
+logger.dump = _tbl_to_string
 
 for _, md in ipairs(logger.modes) do
 	logger[md.name] = function(...)
@@ -99,7 +108,9 @@ for _, md in ipairs(logger.modes) do
 end
 
 -- log-on-call wrapper --
+-- "logger.call.mode(foo)" takes function and return new function which writes it's arguments into the log every time it had been executed
 logger.call = {}
+
 for _, md in ipairs(logger.modes) do
 	logger.call[md.name] = function(func)
 		return (function(...)
